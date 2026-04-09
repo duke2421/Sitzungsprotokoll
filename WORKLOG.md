@@ -53,3 +53,4 @@
 - `README.md` neu erstellt, damit das Repository auf GitHub verständlich dokumentiert ist und der Deployment-Ablauf über Portainer mit `stack.yml` direkt ersichtlich ist.
 - `.gitignore` ergänzt, damit lokale Abhängigkeiten, Umgebungsdateien und SQLite-Laufzeitdaten nicht versehentlich nach GitHub gelangen.
 - Deployment vereinheitlicht: `docker-compose.yml` ist jetzt die einzige Compose-Datei für lokal und Portainer, der Host-Port ist über `HOST_PORT` konfigurierbar; Dokumentation und `AGENTS.md` entsprechend angepasst.
+- `README.md` nach der Vereinheitlichung sprachlich bereinigt, damit Portainer-Deployment, Compose-Datei und variabler Host-Port eindeutig beschrieben sind.

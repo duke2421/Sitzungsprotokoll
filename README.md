@@ -1,6 +1,6 @@
 # Schriftführer
 
-Browserbasierte Protokollverwaltung für Vereins- oder Vorstandssitzungen mit Rollen, Kommentaren und persistenter SQLite-Speicherung. Die Anwendung läuft als schlanke Node.js-App im Docker-Container und kann lokal per `docker compose` oder produktiv über Portainer aus einem GitHub-Repository deployt werden.
+Browserbasierte Protokollverwaltung für Vereins- oder Vorstandssitzungen mit Rollen, Kommentaren und persistenter SQLite-Speicherung. Die Anwendung läuft als schlanke Node.js-App im Docker-Container und kann lokal per `docker compose` oder produktiv über Portainer direkt aus einem GitHub-Repository deployt werden.
 
 ## Funktionsumfang
 
@@ -32,7 +32,7 @@ Voraussetzung: Docker und Docker Compose.
 docker compose up --build
 ```
 
-Die App ist danach lokal unter `http://localhost:8080` erreichbar.
+Die App ist danach standardmäßig unter `http://localhost:8080` erreichbar.
 
 Falls `8080` lokal belegt ist:
 
@@ -58,7 +58,7 @@ docker compose down
 - `FORCE_HTTPS`: `true` oder `false`
 - `LOGIN_RATE_LIMIT_WINDOW_MS`: Zeitfenster für Login-Drosselung
 - `LOGIN_RATE_LIMIT_MAX_ATTEMPTS`: maximal erlaubte Fehlversuche pro Zeitfenster
-- `TZ`: Zeitzone, im Stack aktuell `Europe/Berlin`
+- `TZ`: Zeitzone, standardmäßig `Europe/Berlin`
 
 Hinweis: Der Bootstrap-Admin wird beim Start anhand von `ADMIN_USERNAME`, `ADMIN_PASSWORD` und `ADMIN_DISPLAY_NAME` sichergestellt bzw. aktualisiert. Diese Werte sollten in Produktion bewusst gesetzt werden.
 
@@ -68,7 +68,7 @@ Hinweis: Der Bootstrap-Admin wird beim Start anhand von `ADMIN_USERNAME`, `ADMIN
 2. In Portainer einen neuen Stack aus einem Git-Repository anlegen.
 3. Als Compose-Datei `docker-compose.yml` auswählen.
 4. Für den Stack mindestens diese Werte setzen oder prüfen:
-   - `HOST_PORT`
+   - `HOST_PORT`, zum Beispiel `8090` oder ein anderer freier Host-Port
    - `SESSION_SECRET`
    - `ADMIN_PASSWORD`
    - optional `ADMIN_USERNAME`, `ADMIN_DISPLAY_NAME`
