@@ -111,6 +111,14 @@ function parseLines(text) {
     .filter(Boolean);
 }
 
+function generateLocalId() {
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID();
+  }
+
+  return `local-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 function createBlankProtocol() {
   return {
     id: null,
@@ -124,7 +132,7 @@ function createBlankProtocol() {
     intro: "",
     agenda: [
       {
-        localId: crypto.randomUUID(),
+        localId: generateLocalId(),
         id: null,
         position: 1,
         title: "",
@@ -142,7 +150,7 @@ function hydrateProtocol(protocol) {
     ...createBlankProtocol(),
     ...protocol,
     agenda: (protocol.agenda || []).map((item) => ({
-      localId: item.localId || crypto.randomUUID(),
+      localId: item.localId || generateLocalId(),
       comments: [],
       ...item,
     })),
@@ -1025,7 +1033,7 @@ function parseMarkdown(markdown) {
         .filter((line) => line && !line.startsWith("Verantwortlich:") && !line.startsWith("Beschluss/Ergebnis:") && line !== "Kommentare:");
 
       agenda.push({
-        localId: crypto.randomUUID(),
+        localId: generateLocalId(),
         id: null,
         position: agenda.length + 1,
         title: match[1].trim(),
@@ -1200,7 +1208,7 @@ importFileInput.addEventListener("change", (event) => {
 document.getElementById("addAgendaItem").addEventListener("click", () => {
   state.currentProtocol = getCurrentDraft();
   state.currentProtocol.agenda.push({
-    localId: crypto.randomUUID(),
+    localId: generateLocalId(),
     id: null,
     position: state.currentProtocol.agenda.length + 1,
     title: "",
