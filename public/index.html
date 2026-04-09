@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schriftführer</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-content">
+        <div>
+          <p class="eyebrow">Mehrbenutzer-Protokollverwaltung</p>
+          <h1>Schriftführer</h1>
+          <p class="intro">
+            Protokolle anlegen, verwalten und kommentieren.
+          </p>
+        </div>
+        <img class="site-logo" src="./logo.jpg" alt="SSV Jeddeloh II Logo">
+      </div>
+    </header>
+
+    <section id="authView" class="panel auth-panel">
+      <h2>Anmeldung</h2>
+      <form id="loginForm" class="grid narrow">
+        <label>
+          Benutzername
+          <input id="loginUsername" type="text" autocomplete="username" required>
+        </label>
+        <label>
+          Passwort
+          <input id="loginPassword" type="password" autocomplete="current-password" required>
+        </label>
+        <div class="button-row">
+          <button type="submit">Anmelden</button>
+        </div>
+        <p id="loginStatus" class="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <main id="appView" class="hidden">
+      <section class="panel topbar">
+        <div class="nav-left">
+          <button id="navDashboard" class="secondary small" type="button">Startseite</button>
+          <button id="navProtocol" class="secondary small hidden" type="button">Protokoll</button>
+          <button id="navUsers" class="secondary small admin-only hidden" type="button">Benutzerverwaltung</button>
+        </div>
+        <div class="nav-right">
+          <p id="currentUser" class="meta"></p>
+          <button id="logoutButton" class="secondary small" type="button">Abmelden</button>
+        </div>
+      </section>
+
+      <section id="dashboardView" class="view-stack">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h2>Startseite</h2>
+              <p class="meta">Von hier aus springst Du in bestehende Protokolle oder legst neue an.</p>
+            </div>
+            <button id="newProtocolButton" class="admin-only" type="button">Neues Protokoll</button>
+          </div>
+        </section>
+
+        <section class="panel dashboard-grid">
+          <article class="dashboard-card">
+            <h3>Übersicht</h3>
+            <div id="dashboardStats" class="stats-grid"></div>
+          </article>
+
+          <article class="dashboard-card">
+            <h3>Protokolle</h3>
+            <label class="compact-field">
+              Suche
+              <input id="protocolSearch" type="search" placeholder="Titel, Ort oder Datum">
+            </label>
+            <div id="protocolList" class="protocol-list"></div>
+          </article>
+
+          <article class="dashboard-card admin-only">
+            <h3>Verwaltung</h3>
+            <p class="meta">
+              Admins können Benutzer verwalten oder direkt ein neues Protokoll beginnen.
+            </p>
+            <div class="dashboard-actions">
+              <button id="dashboardNewProtocol" type="button">Neues Protokoll erstellen</button>
+              <button id="dashboardUsers" class="secondary" type="button">Zur Benutzerverwaltung</button>
+            </div>
+          </article>
+
+          <article class="dashboard-card">
+            <h3>Zuletzt aktualisiert</h3>
+            <div id="recentProtocols" class="protocol-list"></div>
+          </article>
+        </section>
+      </section>
+
+      <section id="protocolView" class="view-stack hidden">
+        <section class="panel actions">
+          <div class="section-head">
+            <div>
+              <h2 id="editorHeading">Protokoll</h2>
+              <p id="protocolMeta" class="hint"></p>
+            </div>
+          </div>
+          <div class="button-row admin-only">
+            <button id="saveProtocolButton" type="button">Speichern</button>
+            <button id="downloadMarkdown" class="secondary" type="button">Markdown exportieren</button>
+            <button id="importMarkdown" class="secondary" type="button">Markdown importieren</button>
+            <button id="printProtocolButton" class="secondary" type="button">Drucken / PDF</button>
+            <button id="deleteProtocolButton" class="danger" type="button">Löschen</button>
+          </div>
+          <div class="button-row reader-actions hidden" id="readerActions">
+            <button id="printProtocolButtonReader" class="secondary" type="button">Drucken / PDF</button>
+          </div>
+          <input id="importFile" type="file" accept=".md,text/markdown,text/plain" hidden>
+          <p id="status" class="status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel" id="editorPanel">
+          <h2>Sitzungsdaten</h2>
+          <div class="grid two-columns">
+            <label>
+              Titel
+              <input id="meetingTitle" type="text" placeholder="z. B. Vorstandssitzung">
+            </label>
+            <label>
+              Datum
+              <input id="meetingDate" type="date">
+            </label>
+            <label>
+              Ort
+              <input id="meetingLocation" type="text">
+            </label>
+            <label>
+              Aufgestellt von
+              <input id="meetingRecorder" type="text">
+            </label>
+            <label>
+              Beginn
+              <input id="meetingStart" type="time">
+            </label>
+            <label>
+              Ende
+              <input id="meetingEnd" type="time">
+            </label>
+          </div>
+
+          <label>
+            Anwesende
+            <textarea id="attendees" rows="5" placeholder="Eine Person pro Zeile"></textarea>
+          </label>
+
+          <label>
+            Einleitung / Anlass
+            <textarea id="meetingIntro" rows="3"></textarea>
+          </label>
+        </section>
+
+        <section class="panel hidden" id="readerProtocolPanel">
+          <div class="reader-protocol-head">
+            <div>
+              <p class="eyebrow">Protokollansicht</p>
+              <h2 id="readerProtocolTitle">Sitzungsprotokoll</h2>
+            </div>
+            <img class="reader-logo" src="./logo.jpg" alt="SSV Jeddeloh II Logo">
+          </div>
+          <div id="readerProtocolMeta" class="reader-meta-grid"></div>
+          <section id="readerAttendeesBlock" class="reader-block hidden">
+            <h3>Anwesend</h3>
+            <p id="readerAttendees"></p>
+          </section>
+          <section id="readerIntroBlock" class="reader-block hidden">
+            <h3>Anlass</h3>
+            <p id="readerIntro"></p>
+          </section>
+        </section>
+
+        <section class="panel admin-only">
+          <div class="section-head">
+            <h2>Tagesordnungspunkte</h2>
+            <span class="hint">Admin kann per Drag&Drop sortieren</span>
+          </div>
+          <div id="agendaList" class="agenda-list"></div>
+          <div class="agenda-footer admin-only">
+            <button id="addAgendaItem" class="secondary" type="button">Punkt hinzufügen</button>
+          </div>
+        </section>
+
+        <section class="panel hidden" id="readerAgendaPanel">
+          <div class="section-head">
+            <h2>Tagesordnungspunkte</h2>
+            <span class="hint">Lesemodus</span>
+          </div>
+          <div id="readerAgendaList" class="reader-agenda-list"></div>
+        </section>
+
+        <section class="panel preview admin-only">
+          <div class="section-head">
+            <h2>Markdown-Vorschau</h2>
+            <span class="hint">Lesbar und exportierbar</span>
+          </div>
+          <pre id="previewContent"></pre>
+        </section>
+
+        <section id="printSheet" class="print-sheet hidden">
+          <div class="print-header">
+            <div>
+              <h1 id="printTitle">Sitzungsprotokoll</h1>
+            </div>
+            <img class="print-logo" src="./logo.jpg" alt="SSV Jeddeloh II Logo">
+          </div>
+          <pre id="printContent"></pre>
+        </section>
+      </section>
+
+      <section id="usersView" class="view-stack hidden admin-only">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h2>Benutzerverwaltung</h2>
+              <p class="meta">Admins können Leser und weitere Admins anlegen, ändern, deaktivieren oder löschen.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel dashboard-grid">
+          <article class="dashboard-card">
+            <h3>Benutzer anlegen</h3>
+            <form id="userForm" class="grid narrow">
+              <label>
+                Benutzername
+                <input id="newUsername" type="text" required>
+              </label>
+              <label>
+                Anzeigename
+                <input id="newDisplayName" type="text" required>
+              </label>
+              <label>
+                Passwort
+                <input id="newPassword" type="password" minlength="6" required>
+              </label>
+              <label>
+                Rolle
+                <select id="newRole">
+                  <option value="reader">Leser</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </label>
+              <button type="submit">Benutzer speichern</button>
+              <p id="userStatus" class="status" aria-live="polite"></p>
+            </form>
+          </article>
+
+          <article class="dashboard-card">
+            <h3>Bestehenden Benutzer bearbeiten</h3>
+            <div class="user-tools">
+              <label class="compact-field">
+                Benutzer wählen
+                <select id="manageUserId">
+                  <option value="">Bitte wählen</option>
+                </select>
+              </label>
+            </div>
+            <form id="userManageForm" class="grid narrow hidden">
+              <label>
+                Anzeigename
+                <input id="manageDisplayName" type="text" required>
+              </label>
+              <label>
+                Rolle
+                <select id="manageRole">
+                  <option value="reader">Leser</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </label>
+              <label class="checkbox-row">
+                <input id="manageIsActive" type="checkbox">
+                <span>Benutzer ist aktiv</span>
+              </label>
+              <label>
+                Neues Passwort
+                <input id="managePassword" type="password" minlength="6" placeholder="Leer lassen, um nicht zu ändern">
+              </label>
+              <div class="button-row">
+                <button id="saveManagedUser" type="submit">Änderungen speichern</button>
+                <button id="deleteManagedUser" class="danger" type="button">Benutzer löschen</button>
+              </div>
+              <p id="manageUserStatus" class="status" aria-live="polite"></p>
+            </form>
+          </article>
+        </section>
+
+        <section class="panel">
+          <h3>Benutzerübersicht</h3>
+          <div id="userList" class="user-list"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <template id="agendaEditorTemplate">
+    <article class="agenda-card" draggable="true">
+      <div class="section-head">
+        <div class="agenda-heading">
+          <span class="drag-handle" aria-hidden="true">::</span>
+          <h3 class="agenda-number">Tagesordnungspunkt 1</h3>
+        </div>
+        <button class="danger small remove-item admin-only" type="button">Entfernen</button>
+      </div>
+      <div class="grid two-columns">
+        <label>
+          Überschrift
+          <input class="agenda-title" type="text">
+        </label>
+        <label>
+          Verantwortlich / Follow-up
+          <input class="agenda-owner" type="text">
+        </label>
+      </div>
+      <label>
+        Stichpunkte
+        <textarea class="agenda-notes" rows="4" placeholder="- Punkt 1&#10;- Punkt 2"></textarea>
+      </label>
+      <label>
+        Beschluss / Ergebnis
+        <textarea class="agenda-decision" rows="3"></textarea>
+      </label>
+      <section class="comments">
+        <h4>Kommentare</h4>
+        <div class="comment-list"></div>
+        <form class="comment-form">
+          <textarea class="comment-input" rows="2" placeholder="Kommentar zu diesem Punkt"></textarea>
+          <button class="secondary small" type="submit">Kommentar speichern</button>
+        </form>
+      </section>
+    </article>
+  </template>
+
+  <script src="./app.js"></script>
+</body>
+</html>
