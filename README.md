@@ -23,6 +23,7 @@ Browserbasierte Protokollverwaltung für Vereins- oder Vorstandssitzungen mit Ro
 - `public/styles.css`: Oberfläche und Drucklayout
 - `Dockerfile`: Container-Build
 - `docker-compose.yml`: lokaler Start und Deployment über Portainer
+- `portainer.env`: Variablen-Datei für Portainer oder lokale `.env`-Ableitung
 
 ## Lokaler Start
 
@@ -39,6 +40,8 @@ Falls `8080` lokal belegt ist:
 ```bash
 HOST_PORT=8090 docker compose up --build
 ```
+
+Alternativ kannst du lokal eine `.env` im Projektverzeichnis anlegen und die Werte aus `portainer.env` übernehmen.
 
 Zum Stoppen:
 
@@ -67,15 +70,18 @@ Hinweis: Der Bootstrap-Admin wird beim Start anhand von `ADMIN_USERNAME`, `ADMIN
 1. Repository nach GitHub pushen.
 2. In Portainer einen neuen Stack aus einem Git-Repository anlegen.
 3. Als Compose-Datei `docker-compose.yml` auswählen.
-4. Für den Stack mindestens diese Werte setzen oder prüfen:
+4. `portainer.env` im Repository anpassen oder die Datei in Portainer als Env-Datei hochladen.
+5. Für den Stack mindestens diese Werte setzen oder prüfen:
    - `HOST_PORT`, zum Beispiel `8090` oder ein anderer freier Host-Port
    - `SESSION_SECRET`
    - `ADMIN_PASSWORD`
    - optional `ADMIN_USERNAME`, `ADMIN_DISPLAY_NAME`
    - optional `FORCE_HTTPS=true`, wenn hinter einem korrekt konfigurierten HTTPS-Proxy gearbeitet wird
-5. Stack deployen.
+6. Stack deployen.
 
 Die Compose-Datei verwendet ein persistentes Volume `schriftfuehrer_data` für die SQLite-Datenbank unter `/app/data`.
+
+Die Compose-Datei liest ihre Werte über Umgebungsvariablen ein. Ohne gesetzte Variablen greifen Standardwerte. Für produktive Nutzung solltest du mindestens `SESSION_SECRET`, `ADMIN_PASSWORD` und `HOST_PORT` bewusst setzen.
 
 ## Reverse Proxy
 

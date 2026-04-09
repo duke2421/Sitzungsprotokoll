@@ -10,6 +10,7 @@ This repository now contains a full Docker-ready web app for meeting minutes. Ke
 Operational files live at the root:
 - `Dockerfile` for the application image
 - `docker-compose.yml` for local development and Portainer deployment from GitHub
+- `portainer.env` for Portainer environment values
 - `WORKLOG.md` for session-to-session progress tracking
 
 ## Build, Test, and Development Commands
@@ -19,7 +20,7 @@ Run all commands from the repository root.
 - `node --check server.js` validates backend syntax
 - `node --check public/app.js` validates frontend syntax
 
-For Portainer, deploy `docker-compose.yml` from GitHub and set secure environment values before exposing the service through Nginx Proxy Manager. The host port can be overridden with `HOST_PORT`.
+For Portainer, deploy `docker-compose.yml` from GitHub and use `portainer.env` or uploaded environment values for deployment-specific settings. The host port can be overridden with `HOST_PORT`.
 Login throttling is controlled with `LOGIN_RATE_LIMIT_WINDOW_MS` and `LOGIN_RATE_LIMIT_MAX_ATTEMPTS`.
 
 ## Coding Style & Naming Conventions

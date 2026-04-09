@@ -54,3 +54,4 @@
 - `.gitignore` ergänzt, damit lokale Abhängigkeiten, Umgebungsdateien und SQLite-Laufzeitdaten nicht versehentlich nach GitHub gelangen.
 - Deployment vereinheitlicht: `docker-compose.yml` ist jetzt die einzige Compose-Datei für lokal und Portainer, der Host-Port ist über `HOST_PORT` konfigurierbar; Dokumentation und `AGENTS.md` entsprechend angepasst.
 - `README.md` nach der Vereinheitlichung sprachlich bereinigt, damit Portainer-Deployment, Compose-Datei und variabler Host-Port eindeutig beschrieben sind.
+- Compose-Datei auf Variablen-Substitution umgestellt und `portainer.env` als uploadbare Env-Vorlage für GitHub-/Portainer-Deployments ergänzt; README und `AGENTS.md` entsprechend aktualisiert.
